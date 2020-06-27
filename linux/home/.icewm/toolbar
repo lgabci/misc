@@ -1,3 +1,3 @@
 prog XTerm xterm x-terminal-emulator
-prog Emacs emacs xterm -maximized -e emacs -nw
+prog Emacs emacs x-terminal-emulator -maximized -e emacs -nw
 prog Firefox firefox-esr firefox

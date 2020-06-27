@@ -1,0 +1,6 @@
+
+XTerm*background: black
+XTerm*foreground: grey
+XTerm*faceName: DejaVu Sans Mono
+XTerm*faceSize: 9
+XTerm*metaSendsEscape: true
