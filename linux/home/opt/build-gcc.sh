@@ -42,6 +42,9 @@ fi
 
 # number of CPUs
 NPROC=$(nproc)
+if [ -z "$NPROC" ]; then
+  NPROC=1
+fi
 
 # get files from GNU website
 mkdir -p "$SRC"
