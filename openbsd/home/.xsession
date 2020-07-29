@@ -1,4 +1,4 @@
 #!/bin/sh
 
 xset -b
-icewm-session
+exec icewm-session
