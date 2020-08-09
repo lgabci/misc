@@ -1,0 +1,17 @@
+etc.apm.resume            /etc/apm/resume            c - +x
+etc.doas.conf             /etc/doas.conf             c
+etc.rc.local              /etc/rc.local              c
+etc.ssh.sshd_config.tail  /etc/ssh/sshd_config.tail  t
+usr.local.sbin.rc-init.sh /usr/local/sbin/rc-init.sh c - +x
+
+home.bin.vol.sh           $USERHOME/bin/vol.sh            c $USERNAME:$USERNAME +x
+home..emacs.d.init.el     $USERHOME/.emacs.d/init.el      c $USERNAME:$USERNAME
+home..emacs.d.init_ksh.sh $USERHOME/.emacs.d/init_ksh.sh  c $USERNAME:$USERNAME
+home..gitconfig           $USERHOME/.gitconfig            c $USERNAME:$USERNAME
+home..icewm.menu          $USERHOME/.icewm/menu           c $USERNAME:$USERNAME
+home..icewm.preferences   $USERHOME/.icewm/preferences    c $USERNAME:$USERNAME
+home..icewm.toolbar       $USERHOME/.icewm/toolbar        c $USERNAME:$USERNAME
+home..kshrc               $USERHOME/.kshrc                c $USERNAME:$USERNAME
+home..profile.tail        $USERHOME/.profile.tail         t $USERNAME:$USERNAME
+home..Xdefaults.tail      $USERHOME/.Xdefaults.tail       t $USERNAME:$USERNAME
+home..xsession            $USERHOME/.xsession             c $USERNAME:$USERNAME +x
