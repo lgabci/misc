@@ -34,7 +34,7 @@ case $# in
     ;;
 esac
 
-case $rights in
+case "$rights" in
   ""|-|[0-7]|[0-7][0-7]|[0-7][0-7][0-7]|[0-7][0-7][0-7][0-7]|[-+][rwx]|[ugoa][-+][rwx])
     ;;
   *)
@@ -42,4 +42,30 @@ case $rights in
     exit 1
     ;;
 esac
+
+case "$exists" in
+  "a")
+    if [ ! -e "$fname" ]; then
+      echo "$PNAME: file not found: \"$fname\"" >&2
+      exit 1
+    fi
+    echo -n "$content" >>"$fname"
+    ;;
+  "n")
+    if [ -e "$fname" ]; then
+      echo "$PNAME: file exists: \"$fname\"" >&2
+      exit 1
+    fi
+    echo -n "$content" >"$fname"
+    ;;
+  ""|-)
+    ;;
+  *)
+    echo "$PNAME: bad exists value: \"$exists\"" >&2
+    exit 1
+esac
+
+if [ -n "$rights" ] && [ "$rights" != - ]; then
+  chmod "$rights" "$fname"
+fi
 

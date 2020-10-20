@@ -8,3 +8,10 @@ setxkbmap hu
 exec icewm-session " >~/.xinitrc
 fi
 
+
+
+
+git config --global user.email "gl12qw@gmail.com"
+git config --global user.name "lgabci"
+
+git remote set-url origin git@github.com:lgabci/misc.git
