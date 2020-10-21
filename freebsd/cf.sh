@@ -56,6 +56,10 @@ case "$exists" in
       echo "$PNAME: file exists: \"$fname\"" >&2
       exit 1
     fi
+    path=$(dirname "$fname")
+    if [ ! -e "$path" ]; then
+      mkdir -p "$path"
+    fi
     echo -n "$content" >"$fname"
     ;;
   ""|-)
