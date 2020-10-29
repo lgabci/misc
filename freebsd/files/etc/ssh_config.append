@@ -1,0 +1,3 @@
+
+Host *.local
+   CheckHostIP no

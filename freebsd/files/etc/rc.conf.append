@@ -1,0 +1,4 @@
+wlans_ath0="ath0"
+ifconfig_ath0="DHCP WPA"
+create_args_wlan0="country HU regdomain ETSI"
+defaultroute_delay="15"

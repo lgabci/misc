@@ -2,9 +2,11 @@
 
 set -eu
 
+PNAME=$(basename $0)
+
 # test root
 if [ $(id -u) != 0 ]; then
-  echo "must be run by root" >&2
+  echo "$PNAME: must be run by root" >&2
   exit 1
 fi
 
@@ -13,7 +15,7 @@ if false; then ###############################################
 freebsd-update fetch
 freebsd-update install || q=$?
 if [ ${q:-0} != 2 ]; then
-  reboot
+  poweroff
 fi
 
 # set rc.conf
@@ -45,19 +47,26 @@ fi ##########################################################
 wpa=n
 wlandevs=$(sysctl -n net.wlan.devices)
 for d in $wlandevs; do
-  case $d in
+  case "$d" in
     ath0)
       wpa=y
-      if ! [ grep ath0 /etc/rc.conf ]; then
-        echo 'wlans_ath0="wlan0"
-ifconfig_wlan0="DHCP WPA"' | sudo tee -a /etc/rc.conf
-      fi
+      a="$(./getcont.sh /etc/rc.conf "$d")"
+      ./cf.sh /home/gabci/rc.conf a - "$a"
+      unset a
+
+      sysrc keymap=hu.102
       sysrc wlans_ath0="wlan0"
       sysrc ifconfig_wlan0="DHCP WPA"
       sysrc create_args_wlan0="country HU regdomain ETSI"
       ;;
   esac
 done
+
+a="$(./getcont.sh /etc/rc.conf-2 "$d")"
+./cf.sh /home/gabci/rc.conf a - "$a"
+unset a
+
+exit ## -------------------------------
 
 if [ "$wpa" = y ]; then
   if ! [ -e /etc/wpa_supplicant.conf ]; then
@@ -73,4 +82,9 @@ if [ "$wpa" = y ]; then
     chmod 600 /etc/wpa_supplicant.conf
   fi
 fi
+
+    /etc/login.conf
+cap_mkdb /etc/login.conf
+pw user mod root -L american
+pw user mod gabci -L american
 
