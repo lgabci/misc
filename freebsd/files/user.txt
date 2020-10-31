@@ -1,0 +1,11 @@
+home/.bashrc                        /"$HOME"/.bashrc
+home/.Xdefaults                     /"$HOME"/.Xdefaults
+home/.gitconfig                     /"$HOME"/.gitconfig
+home/opt/build-gcc.sh               /"$HOME"/opt/build-gcc.sh
+home/bin/rel.sh                     /"$HOME"/bin/rel.sh
+home/.emacs.d/init.el               /"$HOME"/.emacs.d/init.el
+home/.emacs.d/init_bash.sh          /"$HOME"/.emacs.d/init_bash.sh
+home/.icewm/menu                    /"$HOME"/.icewm/menu
+home/.icewm/preferences             /"$HOME"/.icewm/preferences
+home/.icewm/theme                   /"$HOME"/.icewm/theme
+home/.icewm/toolbar                 /"$HOME"/.icewm/toolbar
