@@ -9,3 +9,4 @@ home/.icewm/menu                    /"$HOME"/.icewm/menu
 home/.icewm/preferences             /"$HOME"/.icewm/preferences
 home/.icewm/theme                   /"$HOME"/.icewm/theme
 home/.icewm/toolbar                 /"$HOME"/.icewm/toolbar
+home/.login_conf                    /"$HOME"/login_conf

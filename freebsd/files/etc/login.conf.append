@@ -1,7 +1,0 @@
-#
-# American Users Accounts. Setup proper environment variables.
-#
-american|American Users Accounts:\
-	:charset=UTF-8:\
-	:lang=en_US.UTF-8:\
-	:tc=default:

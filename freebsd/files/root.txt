@@ -1,8 +1,6 @@
 boot/loader.conf.append             /boot/loader.conf
 usr/local/etc/sudoers.d/wheel       /usr/local/etc/sudoers.d/wheel       600
-usr/local/etc/rc.d/camcontrol.local /usr/local/etc/rc.d/camcontrol.local 755
 etc/rc.conf.append                  /etc/rc.conf
-etc/login.conf.append               /etc/login.conf
 etc/ssh/ssh_config.append           /etc/ssh/ssh_config
 etc/ssh/sshd_config.append          /etc/ssh/sshd_config
 etc/fstab.append                    /etc/fstab
