@@ -54,6 +54,7 @@ sysrc powerd_enable=YES
 sysrc dbus_enable=YES
 sysrc hald_enable=YES
 sysrc slim_enable=YES
+sysrc hdnostop_enable=YES
 
 # install packages
 pkg install -y xorg icewm slim sudo vim bash bash-completion

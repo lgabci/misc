@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# PROVIDE: hdnostop
+# REQUIRE: DAEMON
+#
+# Add the following lines to /etc/rc.conf to enable the HD-NoStop:
+#
+# hdnostop_enable="YES"
+#
+
+. /etc/rc.subr
+
+name=hdnostop
+rcvar=hdnostop_enable
+
+start_cmd="${name}_start"
+
+load_rc_config ${name}
+: ${hdnostop_enable:=no}
+
+hdnostop_start()
+{
+	camcontrol idle /dev/ada0 -t 0
+	camcontrol apm /dev/ada0
+	camcontrol aam /dev/ada0
+}
+
+run_rc_command "$1"

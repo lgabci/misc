@@ -1,7 +1,0 @@
-#!/bin/sh
-
-. /etc/rc.subr
-
-sudo camcontrol apm /dev/ada0
-sudo camcontrol aam /dev/ada0
-sudo camcontrol idle /dev/ada0 -t 0
