@@ -53,11 +53,10 @@ sysrc ntpdate_enable=YES
 sysrc powerd_enable=YES
 sysrc dbus_enable=YES
 sysrc hald_enable=YES
-sysrc slim_enable=YES
 sysrc hdnostop_enable=YES
 
 # install packages
-pkg install -y xorg icewm slim sudo vim bash bash-completion
+pkg install -y xorg icewm xdm sudo vim bash bash-completion
 fi ##########################################################
 
 while read src trg mod <&3; do
