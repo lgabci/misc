@@ -16,3 +16,9 @@ git config --global user.name "lgabci"
 git config --global pull.rebase false
 
 git remote set-url origin git@github.com:lgabci/misc.git
+
+
+
+#cap_mkdb /etc/login.conf
+#pw user mod root -L american
+#pw user mod gabci -L american
