@@ -1,7 +1,0 @@
-boot/loader.conf.append             /boot/loader.conf
-usr/local/etc/sudoers.d/wheel       /usr/local/etc/sudoers.d/wheel       600
-etc/rc.conf.append                  /etc/rc.conf
-etc/ssh/ssh_config.append           /etc/ssh/ssh_config
-etc/ssh/sshd_config.append          /etc/ssh/sshd_config
-etc/fstab.append                    /etc/fstab
-etc/wpa_supplicant.conf             /etc/wpa_supplicant.conf             600

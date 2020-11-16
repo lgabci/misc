@@ -5,6 +5,7 @@ set -eu
 PNAME=$(basename $0)
 DIR=files
 
+if false; then ################################################################
 # test root
 if [ $(id -u) != 0 ]; then
   echo "$PNAME: must be run by root" >&2
@@ -32,28 +33,35 @@ sysrc hdnostop_enable=YES
 pkg update
 pkg upgrade -y
 pkg install -y xorg icewm xdm sudo vim bash bash-completion emacs
+fi ############################################################################
 
-while read src trg mod <&3; do
-  src="$DIR/$src"
-  case "$src" in
+find "$DIR/" -type f | while read src; do
+  if [ 
+  trg=/${src#$DIR/}
+  case "$trg" in
+    /home/*)
+      ;;
     *.append)
-      lines=$(wc -l <"$src")
-      if ! tail -n "$lines" "$trg" | diff "$src" - >/dev/null; then
-        echo "APPEND $trg"
-        cat "$src" >>"$trg"
-      fi
+      trg=${trg%.append}
+      echo "APPEND $src -> $trg"  ######
+##      lines=$(wc -l <"$src")
+##      if ! tail -n "$lines" "$trg" | diff "$src" - >/dev/null; then
+##        echo "APPEND $trg"
+##        cat "$src" >>"$trg"
+##      fi
       ;;
     *)
-      if [ ! -e "$trg" ]; then
-        echo "NEW    $trg $mod"
-        cp "$src" "$trg"
-        if [ -n "$mod" ]; then
-          chmod "$mod" "$trg"
-        fi
-      fi
+      echo "NEW    $src -> $trg"  ######
+##      if [ ! -e "$trg" ]; then
+##        echo "NEW    $trg $mod"
+##        cp "$src" "$trg"
+##        if [ -n "$mod" ]; then
+##          chmod "$mod" "$trg"
+##        fi
+##      fi
       ;;
   esac
-done 3<"$DIR"/root.txt
+done
 
 f="/etc/wpa_supplicant.conf"
 if grep 'psk="\*\*\*\*\*"' "$f" >/dev/null; then
