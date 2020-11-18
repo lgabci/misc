@@ -36,29 +36,35 @@ pkg install -y xorg icewm xdm sudo vim bash bash-completion emacs
 fi ############################################################################
 
 find "$DIR/" -type f | while read src; do
-  if [ 
+  unset mod
   trg=/${src#$DIR/}
+
+  case "$src" in
+    *.[[:digit:]][[:digit:]][[:digit:]])
+      mod=${src##*.}
+      trg=${trg%.*}
+      ;;
+  esac
+
   case "$trg" in
     /home/*)
       ;;
     *.append)
       trg=${trg%.append}
-      echo "APPEND $src -> $trg"  ######
-##      lines=$(wc -l <"$src")
-##      if ! tail -n "$lines" "$trg" | diff "$src" - >/dev/null; then
-##        echo "APPEND $trg"
-##        cat "$src" >>"$trg"
-##      fi
+      lines=$(wc -l <"$src")
+      if ! tail -n "$lines" "$trg" | diff "$src" - >/dev/null; then
+        echo "APPEND $src -> $trg ${mod:-}"  ######
+        cat "$src" >>"$trg"
+      fi
       ;;
     *)
-      echo "NEW    $src -> $trg"  ######
-##      if [ ! -e "$trg" ]; then
-##        echo "NEW    $trg $mod"
-##        cp "$src" "$trg"
-##        if [ -n "$mod" ]; then
-##          chmod "$mod" "$trg"
-##        fi
-##      fi
+      if [ ! -e "$trg" ]; then
+        echo "NEW    $src -> $trg ${mod:-}"  ######
+        cp "$src" "$trg"
+        if [ -n "$mod" ]; then
+          chmod "$mod" "$trg"
+        fi
+      fi
       ;;
   esac
 done
