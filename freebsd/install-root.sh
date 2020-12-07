@@ -69,6 +69,14 @@ find "$DIR/" -type f | while read src; do
   esac
 done
 
+f="/etc/ttys"
+if grep '^ttyv[[:digit:]]\+[[:space:]]\+"/.*/xdm[ "].*\boff\b' "$f" >/dev/null
+then
+  sed -e '/^tty.*xdm/s/\<off\>/onifexists/' "$f" >"$f.2"
+  cat "$f.2" >"$f"
+  rm "$f.2"
+fi
+
 f="/etc/wpa_supplicant.conf"
 if grep 'psk="\*\*\*\*\*"' "$f" >/dev/null; then
   ssid=$(awk -F = '/ssid=/{gsub("^\"|\"$","",$2);print $2;exit}' "$f")
@@ -95,11 +103,4 @@ if grep 'psk="\*\*\*\*\*"' "$f" >/dev/null; then
       break
     fi
   done
-fi
-
-f="/etc/ttys"
-if grep '^tty.*xdm.*\boff\b' "$f" >/dev/null; then
-  sed -e '/^tty.*xdm/s/\<off\>/onifexists/' "$f" >"$f.2"
-  cat "$f.2" >"$f"
-  rm "$f.2"
 fi
