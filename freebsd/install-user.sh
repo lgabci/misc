@@ -2,7 +2,7 @@
 
 set -eu
 
-DIR=files
+DIR=$(dirname "$0")/files
 
 # install files
 find "$DIR/" -type f | while read src; do

@@ -3,21 +3,13 @@
 set -eu
 
 PNAME=$(basename $0)
-DIR=files
+DIR=$(dirname "$0")/files
 
 # test root
 if [ $(id -u) != 0 ]; then
   echo "$PNAME: must be run by root" >&2
   exit 1
 fi
-
-# update FreeBSD system
-freebsd-update fetch
-freebsd-update install || q=$?
-if [ ${q:-0} != 2 ]; then
-  poweroff
-fi
-unset q
 
 # set rc.conf
 sysrc local_unbound_enable=YES
@@ -27,6 +19,14 @@ sysrc powerd_enable=YES
 sysrc dbus_enable=YES
 sysrc hald_enable=YES
 sysrc hdnostop_enable=YES
+
+# update FreeBSD system
+freebsd-update fetch
+freebsd-update install || q=$?
+if [ ${q:-0} != 2 ]; then
+  poweroff
+fi
+unset q
 
 # install packages
 pkg update
