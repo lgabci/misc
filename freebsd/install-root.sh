@@ -31,7 +31,7 @@ sysrc hdnostop_enable=YES
 # install packages
 pkg update
 pkg upgrade -y
-pkg install -y xorg icewm xdm sudo vim bash bash-completion emacs
+pkg install -y xorg icewm xdm sudo vim bash bash-completion emacs firefox
 
 # install files
 find "$DIR/" -type f | while read src; do
@@ -72,6 +72,7 @@ done
 f="/etc/ttys"
 if grep '^ttyv[[:digit:]]\+[[:space:]]\+"/.*/xdm[ "].*\boff\b' "$f" >/dev/null
 then
+  echo "Set up xdm ..."
   sed -e '/^tty.*xdm/s/\<off\>/onifexists/' "$f" >"$f.2"
   cat "$f.2" >"$f"
   rm "$f.2"
@@ -108,6 +109,7 @@ fi
 
 # set up user
 username=gabci
-if ! id "$username" >/dev/null; then
-  pw useradd "$username" -s /usr/local/bin/bash -G wheel
+if ! id "$username" >/dev/null 2>&1; then
+  echo "Add user $username ..."
+  pw useradd -n "$username" -s /usr/local/bin/bash -G wheel -m
 fi

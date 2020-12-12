@@ -64,6 +64,7 @@ git remote -v show | \
           t=--push
           ;;
       esac
+      echo "Git set $type URL to $giturl ..."
       git remote set-url ${t:-} "$name" "$giturl"
     fi
   done
