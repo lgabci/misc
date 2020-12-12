@@ -5,7 +5,6 @@ set -eu
 PNAME=$(basename $0)
 DIR=files
 
-if false; then ################################################################
 # test root
 if [ $(id -u) != 0 ]; then
   echo "$PNAME: must be run by root" >&2
@@ -33,8 +32,8 @@ sysrc hdnostop_enable=YES
 pkg update
 pkg upgrade -y
 pkg install -y xorg icewm xdm sudo vim bash bash-completion emacs
-fi ############################################################################
 
+# install files
 find "$DIR/" -type f | while read src; do
   unset mod
   trg=/${src#$DIR/}
@@ -53,13 +52,13 @@ find "$DIR/" -type f | while read src; do
       trg=${trg%.append}
       lines=$(wc -l <"$src")
       if ! tail -n "$lines" "$trg" | diff "$src" - >/dev/null; then
-        echo "APPEND $src -> $trg ${mod:-}"  ######
+        echo "APPEND $src -> $trg ${mod:-}"
         cat "$src" >>"$trg"
       fi
       ;;
     *)
       if [ ! -e "$trg" ]; then
-        echo "NEW    $src -> $trg ${mod:-}"  ######
+        echo "NEW    $src -> $trg ${mod:-}"
         cp "$src" "$trg"
         if [ -n "$mod" ]; then
           chmod "$mod" "$trg"
@@ -69,6 +68,7 @@ find "$DIR/" -type f | while read src; do
   esac
 done
 
+# set up xdm to start at boot
 f="/etc/ttys"
 if grep '^ttyv[[:digit:]]\+[[:space:]]\+"/.*/xdm[ "].*\boff\b' "$f" >/dev/null
 then
@@ -77,6 +77,7 @@ then
   rm "$f.2"
 fi
 
+# set up WPA networking
 f="/etc/wpa_supplicant.conf"
 if grep 'psk="\*\*\*\*\*"' "$f" >/dev/null; then
   ssid=$(awk -F = '/ssid=/{gsub("^\"|\"$","",$2);print $2;exit}' "$f")
@@ -103,4 +104,10 @@ if grep 'psk="\*\*\*\*\*"' "$f" >/dev/null; then
       break
     fi
   done
+fi
+
+# set up user
+username=gabci
+if ! id "$username" >/dev/null; then
+  pw useradd "$username" -s /usr/local/bin/bash -G wheel
 fi
