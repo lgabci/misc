@@ -53,6 +53,7 @@ fi
 
 # set Git URL-s
 giturl="git@github.com:lgabci/misc.git"
+gitpath=$(dirname "$0")/..
 git remote -v show | \
   while read name url type; do
     if [ "$name" = origin ] && [ "$url" != "$giturl" ]; then
@@ -65,6 +66,6 @@ git remote -v show | \
           ;;
       esac
       echo "Git set $type URL to $giturl ..."
-      git remote set-url ${t:-} "$name" "$giturl"
+      git -C "$gitpath" remote set-url ${t:-} "$name" "$giturl"
     fi
   done
