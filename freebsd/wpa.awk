@@ -5,11 +5,14 @@ BEGIN {
 
 {
   gsub(" ", "", $1)
+
+  # start of network block
   if ($1 == "network" && $2 == "{") {
     inblk = 1
     wpa = 0
     ssid = ""
   }
+  # end of network block
   else if ($1 == "}") {
     inblk = 0
   }
@@ -25,13 +28,25 @@ BEGIN {
     gsub("^[ \t]*\"|\"[ \t]*$", "", ssid)
   }
   else if (inblk && ssid && wpa && $1 == "psk" && $2 ~ "\"\\*+\"") {
-    print("Passphrase for SSID \"", ssid, "\"")
-    getline passphrase <"-"
-    cmd = "wpa_passphrase " ssid " " passphrase
-    print("CMD: ", cmd)  ####
-    while (cmd | getline pass) {
-      print(". " pass)  ####
-    }
-    close(cmd)
+    do {
+      do {
+        print("Passphrase for SSID \"" ssid "\"")
+        getline passphrase <"-"
+        len = length(passphrase)
+        len_ok = len >= 8 && len <= 63
+        if (! len_ok) {
+          print("WPA passphrase must be 8..63 characters.")
+        }
+      } while (! len_ok)
+
+      cmd = "wpa_passphrase " ssid " " passphrase "; echo $?"
+      print("CMD: " cmd)  ####
+      while (cmd | getline pass) {
+        print(". " pass)  ####
+        status = pass
+      }
+      close(cmd)
+      print("Status: " status)  ####
+    } while (status != 0)
   }
 }
