@@ -4,23 +4,23 @@ ap_scan=1
 fast_reauth=1
 
 network={
-  ssid="omega"
-  scan_ssid=0
-  priority=10
-  proto=RSN
-  key_mgmt=WPA-PSK
-  pairwise=CCMP
-  group=CCMP
-  psk="*****"
+	ssid="omega"
+	scan_ssid=0
+	priority=10
+	proto=RSN
+	key_mgmt=WPA-PSK
+	pairwise=CCMP
+	group=CCMP
+	psk="*****"
 }
 
 network={
-  ssid="gabci"
-  scan_ssid=0
-  priority=5
-  proto=RSN
-  key_mgmt=WPA-PSK
-  pairwise=CCMP
-  group=CCMP
-  psk="*****"
+	ssid="gabci"
+	scan_ssid=0
+	priority=5
+	proto=RSN
+	key_mgmt=WPA-PSK
+	pairwise=CCMP
+	group=CCMP
+	psk="*****"
 }

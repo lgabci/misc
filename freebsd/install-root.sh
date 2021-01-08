@@ -80,32 +80,13 @@ fi
 
 # set up WPA networking
 f="/etc/wpa_supplicant.conf"
-if grep 'psk="\*\*\*\*\*"' "$f" >/dev/null; then
-  ssid=$(awk -F = '/ssid=/{gsub("^\"|\"$","",$2);print $2;exit}' "$f")
-  if [ -z "$ssid" ]; then
-    echo "Can not found SSID in $f." >&2
-    exit 1
+outf=/tmp/wpa_supplicant.conf
+if awk -v outfile="$outf" -f wpa.awk "$f"; then
+  if ! diff -q "$outf" "$f" >/dev/null; then
+    cat "$outf" >"$f"
   fi
-  while true; do
-    while true; do
-      read -p "WiFi password for $ssid: " passphr
-      if [ -n "$passphr" ]; then
-        break
-      fi
-    done
-    psk=$(wpa_passphrase "$ssid" "$passphr" |
-      awk -v ORS='\\n' '/psk/{sub("^\t*", "  ");print}')
-    if [ -z "$psk" ]; then
-      echo "Can not generate PSK." >&2
-    else
-      awk -v psk="$psk" '/psk/{print psk;next}{print}' "$f" >"$f.2"
-      cat "$f.2" >"$f"
-      rm "$f.2"
-      unset ssid passphr
-      break
-    fi
-  done
 fi
+rm "$outf"
 
 # set up user
 username=gabci
