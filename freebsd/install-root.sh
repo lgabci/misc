@@ -11,15 +11,7 @@ if [ $(id -u) != 0 ]; then
   exit 1
 fi
 
-# set rc.conf
-sysrc local_unbound_enable=YES
-sysrc sshd_enable=YES
-sysrc ntpdate_enable=YES
-sysrc powerd_enable=YES
-sysrc dbus_enable=YES
-sysrc hald_enable=YES
-sysrc hdnostop_enable=YES
-
+if false; then ########################
 # update FreeBSD system
 freebsd-update fetch
 freebsd-update install || q=$?
@@ -31,7 +23,19 @@ unset q
 # install packages
 pkg update
 pkg upgrade -y
-pkg install -y xorg icewm xdm sudo vim bash bash-completion emacs firefox
+pkg install -y nss_mdns xorg icewm xdm sudo vim bash bash-completion emacs firefox
+
+# set rc.conf
+sysrc avahi_daemon_enable=YES
+sysrc avahi_dnsconfd_enable=YES
+sysrc local_unbound_enable=YES
+sysrc sshd_enable=YES
+sysrc ntpdate_enable=YES
+sysrc powerd_enable=YES
+sysrc dbus_enable=YES
+sysrc hald_enable=YES
+sysrc hdnostop_enable=YES
+fi ###################################
 
 # install files
 find "$DIR/" -type f | while read src; do
@@ -47,6 +51,16 @@ find "$DIR/" -type f | while read src; do
 
   case "$trg" in
     /home/*)
+      ;;
+    *.sed)
+      trg=${trg%.sed}
+      tmp=$(mktemp)
+      sed -f "$src" "$trg" >"$tmp"
+      if ! diff "$tmp" "$trg" >/dev/null; then
+        echo "SED    $trg"
+        cat "$tmp" >"$trg"
+      fi
+      rm "$tmp"
       ;;
     *.append)
       trg=${trg%.append}
