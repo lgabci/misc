@@ -11,7 +11,6 @@ if [ $(id -u) != 0 ]; then
   exit 1
 fi
 
-if false; then ########################
 # update FreeBSD system
 freebsd-update fetch
 freebsd-update install || q=$?
@@ -35,7 +34,6 @@ sysrc powerd_enable=YES
 sysrc dbus_enable=YES
 sysrc hald_enable=YES
 sysrc hdnostop_enable=YES
-fi ###################################
 
 # install files
 find "$DIR/" -type f | while read src; do
