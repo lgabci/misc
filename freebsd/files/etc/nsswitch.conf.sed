@@ -1,1 +1,0 @@
-s/hosts: .*/hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4/

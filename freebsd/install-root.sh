@@ -50,22 +50,45 @@ find "$DIR/" -type f | while read src; do
   case "$trg" in
     /home/*)
       ;;
-    *.sed)
-      trg=${trg%.sed}
-      tmp=$(mktemp)
-      sed -f "$src" "$trg" >"$tmp"
-      if ! diff "$tmp" "$trg" >/dev/null; then
-        echo "SED    $trg"
-        cat "$tmp" >"$trg"
+    *.replace)
+      trg=${trg%.replace}
+      if [ -e "$trg" ]; then
+        repl=N
+        while (true); do
+          read a  # replace from this text
+          read b  # to this
+          if ! grep -qF "$b" "$trg"; then
+            if grep -q "$a" "$trg"; then
+              sed -i "s/$a/$b/" "$trg"
+              repl=I
+            else
+              echo "$b" >>"$trg"
+              repl=I
+            fi
+          fi
+          if ! read c; then
+            break
+          fi
+        done <"$src"
+        if [ "$repl" = I ]; then
+          echo "REPL   $trg"
+        fi
+      else
+        echo "$trg not found." >&2
+        exit 1
       fi
-      rm "$tmp"
       ;;
     *.append)
       trg=${trg%.append}
-      lines=$(wc -l <"$src")
-      if ! tail -n "$lines" "$trg" | diff "$src" - >/dev/null; then
-        echo "APPEND $src -> $trg ${mod:-}"
-        cat "$src" >>"$trg"
+      if [ -e "$trg" ]; then
+        lines=$(wc -l <"$src")
+        if ! tail -n "$lines" "$trg" | diff "$src" - >/dev/null; then
+          echo "APPEND $src -> $trg ${mod:-}"
+          cat "$src" >>"$trg"
+        fi
+      else
+        echo "$trg not found." >&2
+        exit 1
       fi
       ;;
     *)
