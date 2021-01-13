@@ -1,8 +1,0 @@
-wlans_ath0=.*
-wlans_ath0="wlan0"
-
-ifconfig_wlan0=.*
-ifconfig_wlan0="WPA DHCP"
-
-create_args_wlan0=.*
-create_args_wlan0="country HU regdomain ETSI"

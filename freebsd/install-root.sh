@@ -11,6 +11,7 @@ if [ $(id -u) != 0 ]; then
   exit 1
 fi
 
+if false; then #######
 # update FreeBSD system
 freebsd-update fetch
 freebsd-update install || q=$?
@@ -35,6 +36,11 @@ sysrc dbus_enable=YES
 sysrc hald_enable=YES
 sysrc hdnostop_enable=YES
 
+sysrc wlans_ath0="wlan0"
+sysrc ifconfig_wlan0="WPA DHCP"
+sysrc create_args_wlan0="country HU regdomain ETSI"
+fi ##########
+
 # install files
 find "$DIR/" -type f | while read src; do
   unset mod
@@ -50,29 +56,16 @@ find "$DIR/" -type f | while read src; do
   case "$trg" in
     /home/*)
       ;;
-    *.replace)
-      trg=${trg%.replace}
+    *.sed)
+      trg=${trg%.sed}
       if [ -e "$trg" ]; then
-        repl=N
-        while (true); do
-          read a  # replace from this text
-          read b  # to this
-          if ! grep -qF "$b" "$trg"; then
-            if grep -q "$a" "$trg"; then
-              sed -i "s/$a/$b/" "$trg"
-              repl=I
-            else
-              echo "$b" >>"$trg"
-              repl=I
-            fi
-          fi
-          if ! read c; then
-            break
-          fi
-        done <"$src"
-        if [ "$repl" = I ]; then
-          echo "REPL   $trg"
+        tmpfile=$(mktemp)
+        sed -f "$src" "$trg" >"$tmpfile"
+        if ! diff -q "$trg" "$tmpfile" >/dev/null; then
+          cat "$tmpfile" >"$trg"
+          echo "SED    $trg"
         fi
+        rm "$tmpfile"
       else
         echo "$trg not found." >&2
         exit 1
