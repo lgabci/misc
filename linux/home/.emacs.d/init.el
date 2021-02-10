@@ -63,6 +63,10 @@
               tab-width 8
               indent-tabs-mode nil)
 
+;; set asm ident
+(setq tab-stop-list
+      (quote (2 4)))
+
 ;; function to set current window width to 80 columns
 (defun set-window-width (n)
   "Set the selected window's width."
