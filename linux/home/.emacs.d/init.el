@@ -2,7 +2,8 @@
 (load-theme 'manoj-dark)
 
 ;; hide toolbar
-(tool-bar-mode -1)
+(if (display-graphic-p)
+  (tool-bar-mode -1))
 
 ;; show current row and column
 (setq column-number-mode t)
@@ -62,10 +63,6 @@
 (setq-default c-basic-offset 2
               tab-width 8
               indent-tabs-mode nil)
-
-;; set asm ident
-(setq tab-stop-list
-      (quote (2 4)))
 
 ;; function to set current window width to 80 columns
 (defun set-window-width (n)
