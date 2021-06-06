@@ -1,3 +1,0 @@
-prog XTerm xterm xterm +sb
-prog Emacs emacs xterm -maximized +sb -e emacs -nw
-prog Firefox firefox-esr firefox-esr
