@@ -1,4 +1,4 @@
-xterm*faceName: DejaVu Sans Mono
-xterm*faceSize: 9
+xterm*faceName: Terminus
+xterm*faceSize: 12
 xterm*loginShell: true
 xterm*metaSendsEscape: true

@@ -2,8 +2,8 @@
 
 set -eu
 
-BINUTILSVER=2.34
-GCCVER=10.1.0
+BINUTILSVER=2.31.1
+GCCVER=8.3.0
 
 BINUTILSFILE="binutils-$BINUTILSVER.tar.xz"
 GCCFILE="gcc-$GCCVER.tar.xz"
@@ -14,7 +14,7 @@ GCCURL="https://ftp.gnu.org/gnu/gcc/gcc-$GCCVER/$GCCFILE"
 OPT=~/opt
 SRC="$OPT/src"
 export PREFIX="$OPT/cross"
-export TARGET=i686-elf
+export TARGET=i386-elf
 export PATH="$PREFIX/bin:$PATH"
 
 # clean
@@ -24,17 +24,20 @@ case "${1:-}" in
     rm -rf "$SRC/build-binutils" "$SRC/build-gcc" "$SRC/fake-crt0" "$PREFIX" "$HOME/bin/$TARGET-"*
     exit
     ;;
-  cleanall)
-    echo cleanall ...
+  clean-all)
+    echo clean-all ...
     rm -rf "$SRC" "$PREFIX" "$HOME/bin/$TARGET-"*
     exit
     ;;
 esac
 
 # test and install packages
-pkgs="wget build-essential bison flex texinfo"
-pkgsinstalled=$(dpkg -l $pkgs | awk '/^ii/ {print $2}')
-pkgstoinstall=$(echo $pkgs $pkgsinstalled | tr ' ' '\n' | sort | uniq -u)
+pkgs="build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo"
+pkgstoinstall=$(dpkg -l $pkgs 2>&1 |
+  awk '/dpkg-query: no packages found matching/ {printf "%s ", $NF; next}
+       /^(D|\||\+)/ {next}
+       !/^ii/ {printf "%s ", $2; next}')
+pkgstoinstall=${pkgstoinstall% }
 if [ -n "$pkgstoinstall" ]; then
   echo Installing "$pkgstoinstall"
   sudo apt install $pkgstoinstall
@@ -85,13 +88,13 @@ if ! which "$TARGET-as" >/dev/null; then
 fi
 
 # download prerequisites
-cd "$SRC/gcc-$GCCVER"
-if [ -x contrib/download_prerequisites ]; then
-  if ! [ -e gmp ] || ! [ -e mpfr ] || ! [ -e mpc ] || ! [ -e isl ]; then
-    echo "Downloading prerequisites ..."
-    contrib/download_prerequisites
-  fi
-fi
+#cd "$SRC/gcc-$GCCVER"
+#if [ -x contrib/download_prerequisites ]; then
+#  if ! [ -e gmp ] || ! [ -e mpfr ] || ! [ -e mpc ] || ! [ -e isl ]; then
+#    echo "Downloading prerequisites ..."
+#    contrib/download_prerequisites
+#  fi
+#fi
 
 # install GCC
 mkdir -p "$SRC/build-gcc"

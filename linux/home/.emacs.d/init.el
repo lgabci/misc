@@ -2,8 +2,7 @@
 (load-theme 'manoj-dark)
 
 ;; hide toolbar
-(if (display-graphic-p)
-  (tool-bar-mode -1))
+(tool-bar-mode -1)
 
 ;; show current row and column
 (setq column-number-mode t)
@@ -17,18 +16,14 @@
 (setq whitespace-style '(face lines-tail tab-mark trailing))
 (global-whitespace-mode +1)
 
-;; hihglight TODO-s
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (font-lock-add-keywords nil
-              '(("\\(\\<\\(FIXME\\|TODO\\|BUG\\)[: \n]\\|#\\#.*\\|/\\/.*\\)" 0
-              font-lock-warning-face t)))))
-
 ;; turn off indent tabs mode
 (setq-default indent-tabs-mode nil)
 
+;; set font
+(set-frame-font "Terminus" nil t)
+
 ;; set font size
-(set-face-attribute 'default nil :height 90)
+(set-face-attribute 'default nil :height 120)
 
 ;; save desktop
 (setq desktop-auto-save-timeout nil)
@@ -63,6 +58,9 @@
 (setq-default c-basic-offset 2
               tab-width 8
               indent-tabs-mode nil)
+
+;; set shell scripts offset
+(setq sh-basic-offset 2)
 
 ;; function to set current window width to 80 columns
 (defun set-window-width (n)
