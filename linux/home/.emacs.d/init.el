@@ -19,11 +19,8 @@
 ;; turn off indent tabs mode
 (setq-default indent-tabs-mode nil)
 
-;; set font
-(set-frame-font "Terminus" nil t)
-
-;; set font size
-(set-face-attribute 'default nil :height 120)
+;; set default font and size
+(add-to-list 'default-frame-alist '(font . "Terminus") '(height . 120))
 
 ;; save desktop
 (setq desktop-auto-save-timeout nil)
@@ -47,9 +44,6 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-;; disable lock files
-(setq create-lockfiles nil)
-
 ;; set C style
 (setq c-default-style
       '((java-mode . "java")
@@ -61,6 +55,9 @@
 
 ;; set shell scripts offset
 (setq sh-basic-offset 2)
+
+;; disable lock files
+(setq create-lockfiles nil)
 
 ;; function to set current window width to 80 columns
 (defun set-window-width (n)
