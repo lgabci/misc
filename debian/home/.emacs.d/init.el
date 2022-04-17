@@ -1,3 +1,6 @@
+;; set file assembly syntax for .inc files
+(add-to-list 'auto-mode-alist '("\\.inc\\'" . asm-mode))
+
 ;; load theme
 (load-theme 'manoj-dark)
 
