@@ -23,7 +23,7 @@
 (setq-default indent-tabs-mode nil)
 
 ;; set default font and size
-(add-to-list 'default-frame-alist '(font . "Terminus") '(height . 120))
+;(add-to-list 'default-frame-alist '(font . "Terminus") '(height . 120))
 
 ;; save desktop
 (setq desktop-auto-save-timeout nil)
@@ -56,6 +56,9 @@
               tab-width 8
               indent-tabs-mode nil)
 
+;; set as comment to #
+(setq asm-comment-char ?\#)
+
 ;; set shell scripts offset
 (setq sh-basic-offset 2)
 
@@ -73,3 +76,32 @@
   (set-window-width 80))
 
 (global-set-key "\C-x~" 'set-80-columns)
+
+;; functions to M-x make...
+(defun make-sub(cmd)
+  "Travelling up the path, find a Makefile and 'make'."
+  (let ((make-dir (locate-dominating-file default-directory "Makefile")))
+    (when make-dir
+      (with-temp-buffer
+       (cd make-dir)
+       (compile cmd)))))
+
+(defun make()
+  "Doc-string for 'make'."
+  (interactive)
+  (make-sub "make -j 4"))
+
+(defun make-with-clean()
+  "Doc-string for 'make-with-clean'."
+  (interactive)
+  (make-sub "make -j 4 clean && make -j 4"))
+
+(defun make-interactive(cmd)
+  "Doc-string for 'make-interactive'."
+  (interactive (list (read-string "make command: " "make -j 4")))
+  (make-sub cmd))
+
+(defun make-clean()
+  "Doc-string for 'make-clean'."
+  (interactive)
+  (make-sub "make -j 4 clean"))

@@ -1,3 +1,0 @@
-# enable HDD spin down at shutdown
-
-ACTION=="add|change", SUBSYSTEM=="scsi_disk", RUN+="/bin/sh -c 'echo 1 >/sys/class/scsi_disk/%k/manage_start_stop'"

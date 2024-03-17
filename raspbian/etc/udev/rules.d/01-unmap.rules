@@ -1,3 +1,0 @@
-# enable TRIM over USB
-
-ACTION=="add|change", ATTRS{idVendor}=="152d", ATTRS{idProduct}=="2329", SUBSYSTEM=="scsi_disk", ATTR{provisioning_mode}="unmap"
