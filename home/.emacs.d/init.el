@@ -98,7 +98,7 @@
 
 (defun make-interactive(cmd)
   "Doc-string for 'make-interactive'."
-  (interactive (list (read-string "make command: " "make -j 4")))
+  (interactive (list (read-string "make command: " compile-command)))
   (make-sub cmd))
 
 (defun make-clean()
