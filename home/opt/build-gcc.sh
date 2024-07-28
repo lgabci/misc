@@ -2,8 +2,8 @@
 
 set -eu
 
-BINUTILSVER=2.31.1
-GCCVER=8.3.0
+BINUTILSVER=2.40
+GCCVER=12.2.0
 
 BINUTILSFILE="binutils-$BINUTILSVER.tar.xz"
 GCCFILE="gcc-$GCCVER.tar.xz"
@@ -12,16 +12,16 @@ BINUTILSURL="https://ftp.gnu.org/gnu/binutils/$BINUTILSFILE"
 GCCURL="https://ftp.gnu.org/gnu/gcc/gcc-$GCCVER/$GCCFILE"
 
 OPT=~/opt
-SRC="$OPT/src"
-export PREFIX="$OPT/cross"
 export TARGET=i386-elf
+SRC="$OPT/src-$TARGET"
+export PREFIX="$OPT/cross-$TARGET"
 export PATH="$PREFIX/bin:$PATH"
 
 # clean
 case "${1:-}" in
   clean)
     echo clean ...
-    rm -rf "$SRC/build-binutils" "$SRC/build-gcc" "$SRC/fake-crt0" "$PREFIX" "$HOME/bin/$TARGET-"*
+    rm -rf "$SRC/build-binutils-$BINUTILSVER" "$SRC/build-gcc-$GCCVER" "$SRC/fake-crt0" "$PREFIX" "$HOME/bin/$TARGET-"*
     exit
     ;;
   clean-all)
@@ -32,7 +32,7 @@ case "${1:-}" in
 esac
 
 # test and install packages
-pkgs="build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo"
+pkgs="build-essential bison flex texinfo"
 pkgstoinstall=$(dpkg -l $pkgs 2>&1 |
   awk '/dpkg-query: no packages found matching/ {printf "%s ", $NF; next}
        /^(D|\||\+)/ {next}
@@ -70,8 +70,8 @@ if ! [ -e $(basename "$GCCFILE" .tar.xz) ]; then
 fi
 
 # build binutils
-mkdir -p "$SRC/build-binutils"
-cd "$SRC/build-binutils"
+mkdir -p "$SRC/build-binutils-$BINUTILSVER"
+cd "$SRC/build-binutils-$BINUTILSVER"
 
 if ! [ -e Makefile ]; then
   ../"binutils-$BINUTILSVER"/configure --target="$TARGET" --prefix="$PREFIX" --with-sysroot --disable-nls --disable-werror
@@ -88,20 +88,20 @@ if ! which "$TARGET-as" >/dev/null; then
 fi
 
 # download prerequisites
-#cd "$SRC/gcc-$GCCVER"
-#if [ -x contrib/download_prerequisites ]; then
-#  if ! [ -e gmp ] || ! [ -e mpfr ] || ! [ -e mpc ] || ! [ -e isl ]; then
-#    echo "Downloading prerequisites ..."
-#    contrib/download_prerequisites
-#  fi
-#fi
+cd "$SRC/gcc-$GCCVER"
+if [ -x contrib/download_prerequisites ]; then
+  if ! [ -e gmp ] || ! [ -e mpfr ] || ! [ -e mpc ] || ! [ -e isl ]; then
+    echo "Downloading prerequisites ..."
+    contrib/download_prerequisites
+  fi
+fi
 
 # install GCC
-mkdir -p "$SRC/build-gcc"
-cd "$SRC/build-gcc"
+mkdir -p "$SRC/build-gcc-$GCCVER"
+cd "$SRC/build-gcc-$GCCVER"
 
 if ! [ -e Makefile ]; then
-  ../"gcc-$GCCVER"/configure --target="$TARGET" --prefix="$PREFIX" --disable-nls --enable-languages=c --without-headers
+  ../"gcc-$GCCVER"/configure --target="$TARGET" --prefix="$PREFIX" --disable-nls --enable-languages=c --without-headers --with-gnu-ld --with-gnu-as
 fi
 if ! [ -x "$PREFIX/bin/$TARGET-gcc" ]; then
   make -j $NPROC all-gcc
