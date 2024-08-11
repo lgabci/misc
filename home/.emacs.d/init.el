@@ -25,6 +25,9 @@
 ;; set default font and size
 ;(add-to-list 'default-frame-alist '(font . "Terminus") '(height . 120))
 
+;; goto 1st error in compilation buffer
+(setq compilation-scroll-output 'first-error)
+
 ;; save desktop
 (setq desktop-auto-save-timeout nil)
 (setq desktop-restore-forces-onscreen nil)
@@ -80,20 +83,29 @@
 ;; functions to M-x meson ...
 (setq meson-src-dir (file-name-as-directory "~/projects/lgos"))
 (setq meson-bld-dir (file-name-as-directory "/tmp/lgos"))
+(setq meson-arch "i386")
 
-(defun meson()
+(defun meson(&optional cmd)
   "Doc-string for 'meson'."
   (interactive)
   (setq meson-cmpl "")
   (unless (file-exists-p (concat meson-bld-dir "build.ninja"))
     (setq meson-cmpl (concat "meson setup --cross-file"
-                             " " meson-src-dir "src/arch/i386/meson-cross.txt"
+                             " " meson-src-dir "src/arch/"
+                             meson-arch "/meson-cross.txt"
                              " " meson-src-dir
                              " " meson-bld-dir " && ")))
-  (setq meson-cmpl (concat meson-cmpl "ninja -C " meson-bld-dir))
+  (setq meson-cmpl (concat meson-cmpl "meson compile -C " meson-bld-dir
+                           (if (not (null cmd))
+                               (concat " " cmd))))
   (compile meson-cmpl))
 
 (defun meson-clean()
   "Doc-string for 'meson-clean'."
   (interactive)
   (compile (concat "rm -rf " meson-bld-dir)))
+
+(defun meson-emu()
+  "Doc-string for 'meson-emu'."
+  (interactive)
+  (meson "emu"))
