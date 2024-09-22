@@ -60,7 +60,7 @@ editor_check_new_line=false
 editor_show_right_margin=false
 editor_group_undo=true
 editor_state_full_filename=true
-editor_ask_filename_before_edit=false
+editor_ask_filename_before_edit=true
 nice_rotating_dash=true
 shadows=true
 mcview_remember_file_position=false
@@ -92,7 +92,7 @@ output_lines=0
 left_panel_size=88
 top_panel_size=0
 message_visible=false
-keybar_visible=false
+keybar_visible=true
 xterm_title=true
 command_prompt=true
 menubar_visible=false
@@ -139,6 +139,17 @@ permission_mode=false
 torben_fj_mode=false
 quick_search_mode=2
 select_flags=6
+
+[DiffView]
+show_symbols=false
+show_numbers=false
+tab_size=8
+diff_quality=0
+diff_ignore_tws=false
+diff_ignore_all_space=false
+diff_ignore_space_change=false
+diff_tab_expansion=false
+diff_ignore_case=false
 
 [Panelize]
 Find *.orig after patching=find . -name \\*.orig -print

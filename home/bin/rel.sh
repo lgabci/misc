@@ -30,16 +30,16 @@ awk 'BEGIN {
        SECS='$SECS'
      }
        function addsec(p) {
-	 split(p, t, ":");
-	 sub(",", ".", t[3])
-	 s=(t[1] * 60 + t[2]) * 60 + t[3] + SECS
+         split(p, t, ":");
+         sub(",", ".", t[3])
+         s=(t[1] * 60 + t[2]) * 60 + t[3] + SECS
 
-	 sec=s % 60
-	 min=int(s / 60) % 60
-	 hr=int(s / 60 / 60) % 60
+         sec=s % 60
+         min=int(s / 60) % 60
+         hr=int(s / 60 / 60) % 60
 
-	 ret=sprintf("%02d:%02d:%06.3f", hr, min, sec)
-	 sub("\\.", ",", ret)
+         ret=sprintf("%02d:%02d:%06.3f", hr, min, sec)
+         sub("\\.", ",", ret)
          return ret
        }
 
@@ -49,7 +49,7 @@ awk 'BEGIN {
        }
        gsub("\r", "", $0);
        if ($0 ~ /^[[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2},[[:digit:]]{3} +--> +[[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2},[[:digit:]]{3}$/) {
-	 print(addsec($1), "-->", addsec($3))
+         print(addsec($1), "-->", addsec($3))
        }
        else {
          print $0
