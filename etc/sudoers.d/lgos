@@ -1,0 +1,7 @@
+gabci	ALL = NOPASSWD: /usr/bin/mount -t msdos -o loop\,offset=1048576\,sizelimit=10485760\,uid=gabci\,gid=gabci /tmp/lgos/src/arch/i386/emu/hd_fat.img /tmp/lgos/src/arch/i386/emu/hd_fat.img.mnt
+gabci	ALL = NOPASSWD: /usr/bin/umount /tmp/lgos/src/arch/i386/emu/hd_fat.img.mnt
+
+gabci	ALL = NOPASSWD: /usr/bin/mount -t ext2 -o loop\,offset=1048576\,sizelimit=10485760\ /tmp/lgos/src/arch/i386/emu/hd_ext2.img /tmp/lgos/src/arch/i386/emu/hd_ext2.img.mnt
+gabci	ALL = NOPASSWD: /usr/bin/umount /tmp/lgos/src/arch/i386/emu/hd_ext2.img.mnt
+
+gabci	ALL = NOPASSWD: /usr/sbin/filefrag
