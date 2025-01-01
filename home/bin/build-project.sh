@@ -2,13 +2,6 @@
 
 set -eu
 
-case "${1:-}" in
-  f:*)
-    cd "$(dirname ${1#f:})"
-    shift
-    ;;
-esac
-
 if tdir=$(git rev-parse --show-toplevel); then
   comp="$tdir/compile.sh"
   if [ -x "$comp" ]; then
