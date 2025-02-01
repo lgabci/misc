@@ -371,10 +371,13 @@ o       Open next a free console
 -------------------------------------------------------------------------------
 
 C       Compile
-        compile-project.sh
+        build-project.sh
 
 E       Compile emu
-        compile-project.sh emu
+        build-project.sh emu
 
 K       Compile clean
-        compile-project.sh clean
+        build-project.sh clean
+
+D       Compile
+        build-project.sh doc

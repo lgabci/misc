@@ -485,10 +485,13 @@ l       Lower case selection
 -------------------------------------------------------------------------------
 
 C       compile
-        compile-project.sh f:%f
+        build-project.sh
 
 E       emu
-        compile-project.sh f:%f emu
+        build-project.sh emu
 
 K       clean
-        compile-project.sh f:%f clean
+        build-project.sh clean
+
+D       doc
+        build-project.sh doc
