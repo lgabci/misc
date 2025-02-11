@@ -370,14 +370,14 @@ o       Open next a free console
 
 -------------------------------------------------------------------------------
 
-C       Compile
+C       compile
         build-project.sh
 
-E       Compile emu
+E       emu
         build-project.sh emu
 
-K       Compile clean
+K       clean
         build-project.sh clean
 
-D       Compile
+D       doc
         build-project.sh doc
