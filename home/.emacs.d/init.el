@@ -96,24 +96,24 @@
 ;; functions to M-x meson ...
 (setq buildcmd "")
 
-(defun build(&optional cmd)
-  "Doc-string for 'build'."
+(defun buildbg(&optional cmd)
+  "Doc-string for 'buildbg'."
   (interactive)
   (setq buildcmd cmd)
   (compile (concat "build-project.sh " cmd)))
 
-(defun build-interactive()
-  "Doc-string for 'build-interactive'."
+(defun build()
+  "Doc-string for 'build'."
   (interactive)
   (let ((cmd (read-string "arg: " buildcmd)))
-    (build cmd)))
+    (buildbg cmd)))
 
 (defun build-clean()
   "Doc-string for 'build-clean'."
   (interactive)
-  (build "clean"))
+  (buildbg "clean"))
 
 (defun rebuild()
   "Doc-string for 'rebuild'."
   (interactive)
-  (build buildcmd))
+  (buildbg buildcmd))
