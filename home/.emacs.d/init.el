@@ -28,6 +28,12 @@
 ;; goto 1st error in compilation buffer
 (setq compilation-scroll-output 'first-error)
 
+;; open compilation window on right side
+(add-to-list 'display-buffer-alist
+             '("*compilation*"
+	       (display-buffer-in-side-window)
+               (side . right)))
+
 ;; save desktop
 (setq desktop-auto-save-timeout nil)
 (setq desktop-restore-forces-onscreen nil)
@@ -86,19 +92,11 @@
 (setq imenu-list-size 30)
 (add-hook 'emacs-startup-hook 'imenu-list-minor-mode)
 
-;; open compilation window on right side
-(add-to-list 'display-buffer-alist
-             '("*compilation*"
-               (display-buffer-in-side-window)
-               (window-width . 0.33)
-               (side . right)))
-
 ;; functions to M-x meson ...
 (setq buildcmd "")
 
 (defun buildbg(&optional cmd)
   "Doc-string for 'buildbg'."
-  (interactive)
   (setq buildcmd cmd)
   (compile (concat "build-project.sh " cmd)))
 
