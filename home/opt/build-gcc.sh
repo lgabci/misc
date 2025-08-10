@@ -2,8 +2,10 @@
 
 set -eu
 
-BINUTILSVER=2.40
-GCCVER=12.2.0
+renice --priority 19 -p $$
+
+BINUTILSVER=2.44
+GCCVER=14.2.0
 
 BINUTILSFILE="binutils-$BINUTILSVER.tar.xz"
 GCCFILE="gcc-$GCCVER.tar.xz"
@@ -12,7 +14,7 @@ BINUTILSURL="https://ftp.gnu.org/gnu/binutils/$BINUTILSFILE"
 GCCURL="https://ftp.gnu.org/gnu/gcc/gcc-$GCCVER/$GCCFILE"
 
 OPT=~/opt
-export TARGET=i386-elf
+export TARGET=x86_64-elf
 SRC="$OPT/src-$TARGET"
 export PREFIX="$OPT/cross-$TARGET"
 export PATH="$PREFIX/bin:$PATH"
@@ -101,7 +103,7 @@ mkdir -p "$SRC/build-gcc-$GCCVER"
 cd "$SRC/build-gcc-$GCCVER"
 
 if ! [ -e Makefile ]; then
-  ../"gcc-$GCCVER"/configure --target="$TARGET" --prefix="$PREFIX" --disable-nls --enable-languages=c --without-headers --with-gnu-ld --with-gnu-as
+  ../"gcc-$GCCVER"/configure --target="$TARGET" --prefix="$PREFIX" --disable-nls --enable-languages=c --without-headers --without-headers
 fi
 if ! [ -x "$PREFIX/bin/$TARGET-gcc" ]; then
   make -j $NPROC all-gcc
