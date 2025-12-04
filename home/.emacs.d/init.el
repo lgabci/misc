@@ -31,8 +31,11 @@
 ;; open compilation window on right side
 (add-to-list 'display-buffer-alist
              '("*compilation*"
-	       (display-buffer-in-side-window)
-               (side . right)))
+               (display-buffer-reuse-window display-buffer-in-direction)
+               (direction . right)
+               (reusable-window . t)
+               (window-minibuffer-p . nil)
+               (window-side . nil)))
 
 ;; save desktop
 (setq desktop-auto-save-timeout nil)
