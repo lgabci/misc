@@ -2,10 +2,12 @@
 (add-to-list 'auto-mode-alist '("\\.inc\\'" . asm-mode))
 
 ;; load theme
-(load-theme 'manoj-dark)
+(load-theme 'modus-vivendi t)
 
-;; hide toolbar
+;; hide menu, toolbar and scroll bar
+(menu-bar-mode -1)
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 
 ;; show current row and column
 (setq column-number-mode t)
@@ -23,7 +25,8 @@
 (setq-default indent-tabs-mode nil)
 
 ;; set default font and size
-;(add-to-list 'default-frame-alist '(font . "Terminus") '(height . 120))
+(if (display-graphic-p)
+  (set-face-attribute 'default nil :font "Monospace-10"))
 
 ;; goto 1st error in compilation buffer
 (setq compilation-scroll-output 'first-error)
@@ -38,16 +41,11 @@
                (window-side . nil)))
 
 ;; save desktop
+(setq desktop-auto-save-frames nil)
+(setq desktop-auto-restore-frames nil)
 (setq desktop-auto-save-timeout nil)
 (setq desktop-restore-forces-onscreen nil)
-(add-hook 'desktop-after-read-hook
-          (lambda()
-            (frameset-restore
-              desktop-saved-frameset
-              :reuse-frames (eq desktop-restore-reuses-frames t)
-              :cleanup-frames (not (eq desktop-restore-reuses-frames 'keep))
-              :force-display desktop-restore-in-current-display
-              :force-onscreen desktop-restore-forces-onscreen)))
+(setq desktop-restore-forces-savewinconf nil)
 (desktop-save-mode 1)
 
 ;; auto refresh modified buffers
@@ -93,9 +91,14 @@
 (global-set-key (kbd "C-'") #'imenu-list-smart-toggle)
 (setq imenu-list-position 'left)
 (setq imenu-list-size 30)
+(defun my/fix-imenu-width ()
+  "Fixed width for imenu-list."
+  (when (string-match-p "imenu-list" (buffer-name))
+    (setq windows-size-fixed 'width)))
+(add-hook 'imenu-list-major-mode-hook 'my/fix-imenu-width)
 (add-hook 'emacs-startup-hook 'imenu-list-minor-mode)
 
-;; functions to M-x meson ...
+;; functions to build ...
 (setq buildcmd "")
 
 (defun buildbg(&optional cmd)

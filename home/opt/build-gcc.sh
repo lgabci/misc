@@ -15,6 +15,8 @@ GCCURL="https://ftp.gnu.org/gnu/gcc/gcc-$GCCVER/$GCCFILE"
 
 OPT=~/opt
 export TARGET=x86_64-elf
+export ENABLE_TARGETS="x86_64-elf,i386-elf"
+export MULTILIB_LIST="m32,m64"
 SRC="$OPT/src-$TARGET"
 export PREFIX="$OPT/cross-$TARGET"
 export PATH="$PREFIX/bin:$PATH"
@@ -23,7 +25,8 @@ export PATH="$PREFIX/bin:$PATH"
 case "${1:-}" in
   clean)
     echo clean ...
-    rm -rf "$SRC/build-binutils-$BINUTILSVER" "$SRC/build-gcc-$GCCVER" "$SRC/fake-crt0" "$PREFIX" "$HOME/bin/$TARGET-"*
+    rm -rf "$SRC/build-binutils-$BINUTILSVER" "$SRC/build-gcc-$GCCVER" \
+      "$SRC/crt0" "$PREFIX" "$HOME/bin/$TARGET-"*
     exit
     ;;
   clean-all)
@@ -76,7 +79,9 @@ mkdir -p "$SRC/build-binutils-$BINUTILSVER"
 cd "$SRC/build-binutils-$BINUTILSVER"
 
 if ! [ -e Makefile ]; then
-  ../"binutils-$BINUTILSVER"/configure --target="$TARGET" --prefix="$PREFIX" --with-sysroot --disable-nls --disable-werror
+  ../"binutils-$BINUTILSVER"/configure --target="$TARGET" --prefix="$PREFIX" \
+    --enable-targets="$ENABLE_TARGETS" --with-sysroot --disable-nls \
+    --disable-werror
 fi
 if ! [ -x "$PREFIX/bin/$TARGET-as" ]; then
   make -j $NPROC
@@ -103,12 +108,14 @@ mkdir -p "$SRC/build-gcc-$GCCVER"
 cd "$SRC/build-gcc-$GCCVER"
 
 if ! [ -e Makefile ]; then
-  ../"gcc-$GCCVER"/configure --target="$TARGET" --prefix="$PREFIX" --disable-nls --enable-languages=c --without-headers --without-headers
+  ../"gcc-$GCCVER"/configure --target="$TARGET" --prefix="$PREFIX" \
+    --enable-languages=c --without-headers --enable-multilib \
+    --with-multilib-list="$MULTILIB_LIST" --without-headers --disable-nls
 fi
 if ! [ -x "$PREFIX/bin/$TARGET-gcc" ]; then
   make -j $NPROC all-gcc
-  make -j $NPROC all-target-libgcc
   make install-gcc
+  make -j $NPROC all-target-libgcc
   make install-target-libgcc
 fi
 
@@ -118,9 +125,10 @@ if ! [ -e "$HOME/bin/$TARGET-gcc" ]; then
   ln -rst "$HOME/bin" "$PREFIX/bin/"*
 fi
 
-# fake crt0
-mkdir -p "$SRC/fake-crt0"
-cd "$SRC/fake-crt0"
+# crt0
+if false; then  # ---------------------------------------------------
+mkdir -p "$SRC/crt0"
+cd "$SRC/crt0"
 
 if ! [ -e crt0.s ]; then
   cat >crt0.s <<EOF
@@ -139,6 +147,7 @@ if ! [ -e crt0.o ]; then
   "$TARGET-as" -o crt0.o crt0.s
 fi
 
+# libc
 if ! [ -e libc.a ]; then
   "$TARGET-ar" rcs libc.a crt0.o
 fi
@@ -150,3 +159,4 @@ fi
 if ! [ -e "$PREFIX/lib/gcc/$TARGET/$GCCVER/libc.a" ]; then
   cp libc.a "$PREFIX/lib/gcc/$TARGET/$GCCVER/libc.a"
 fi
+fi # ----------------------------------------------------------------
