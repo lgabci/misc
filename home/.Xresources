@@ -1,0 +1,4 @@
+xterm*faceName: Terminus
+xterm*faceSize: 12
+xterm*loginShell: true
+xterm*metaSendsEscape: true
