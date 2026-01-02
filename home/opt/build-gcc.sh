@@ -4,8 +4,8 @@ set -eu
 
 renice --priority 19 -p $$
 
-BINUTILSVER=2.44
-GCCVER=14.2.0
+BINUTILSVER=$(as -version | awk '{print $NF; exit}')
+GCCVER=$(gcc -dumpfullversion)
 
 BINUTILSFILE="binutils-$BINUTILSVER.tar.xz"
 GCCFILE="gcc-$GCCVER.tar.xz"
@@ -124,39 +124,3 @@ if ! [ -e "$HOME/bin/$TARGET-gcc" ]; then
   echo "Create symlinks ..."
   ln -rst "$HOME/bin" "$PREFIX/bin/"*
 fi
-
-# crt0
-if false; then  # ---------------------------------------------------
-mkdir -p "$SRC/crt0"
-cd "$SRC/crt0"
-
-if ! [ -e crt0.s ]; then
-  cat >crt0.s <<EOF
-.section .text
-.global _start
-_start:
-   nop
-   nop
-   nop
-   nop
-.size _start, . - _start
-EOF
-fi
-
-if ! [ -e crt0.o ]; then
-  "$TARGET-as" -o crt0.o crt0.s
-fi
-
-# libc
-if ! [ -e libc.a ]; then
-  "$TARGET-ar" rcs libc.a crt0.o
-fi
-
-if ! [ -e "$PREFIX/lib/gcc/$TARGET/$GCCVER/crt0.o" ]; then
-  cp crt0.o "$PREFIX/lib/gcc/$TARGET/$GCCVER/crt0.o"
-fi
-
-if ! [ -e "$PREFIX/lib/gcc/$TARGET/$GCCVER/libc.a" ]; then
-  cp libc.a "$PREFIX/lib/gcc/$TARGET/$GCCVER/libc.a"
-fi
-fi # ----------------------------------------------------------------

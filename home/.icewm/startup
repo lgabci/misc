@@ -1,4 +1,4 @@
 #!/bin/sh
 
 xset -b
-/usr/bin/volumeicon
+/usr/bin/volumeicon &
