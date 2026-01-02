@@ -98,6 +98,10 @@
 (add-hook 'imenu-list-major-mode-hook 'my/fix-imenu-width)
 (add-hook 'emacs-startup-hook 'imenu-list-minor-mode)
 
+;; numeric keypad del in vterm
+(with-eval-after-load 'vterm
+  (define-key vterm-mode-map (kbd "<kp-delete>") #'vterm-send-delete))
+
 ;; functions to build ...
 (setq buildcmd "")
 

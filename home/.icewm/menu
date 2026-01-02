@@ -1,8 +1,0 @@
-include /usr/share/icewm/menu
-
-separator
-prog KiCad kicad kicad
-prog DOSBox dosbox dosbox
-prog "Links 2" links2 links2 -g www.google.hu
-prog "VLC media player" vlc vlc
-prog Xcalc accessories-calculator xcalc
