@@ -102,26 +102,12 @@
 (with-eval-after-load 'vterm
   (define-key vterm-mode-map (kbd "<kp-delete>") #'vterm-send-delete))
 
-;; functions to build ...
-(setq buildcmd "")
+;; project.el
+(require 'project)
 
-(defun buildbg(&optional cmd)
-  "Doc-string for 'buildbg'."
-  (setq buildcmd cmd)
-  (compile (concat "build-project.sh " cmd)))
+(defun my/project-try-makefile (dir)
+  (let ((found (locate-dominating-file dir "Makefile")))
+    (if found
+      (cons 'transient found))))
 
-(defun build()
-  "Doc-string for 'build'."
-  (interactive)
-  (let ((cmd (read-string "arg: " buildcmd)))
-    (buildbg cmd)))
-
-(defun build-clean()
-  "Doc-string for 'build-clean'."
-  (interactive)
-  (buildbg "clean"))
-
-(defun rebuild()
-  "Doc-string for 'rebuild'."
-  (interactive)
-  (buildbg buildcmd))
+(add-hook 'project-find-functions #'my/project-try-makefile)
