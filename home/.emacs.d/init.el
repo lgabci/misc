@@ -20,6 +20,11 @@
 (setq whitespace-line-column 80)
 (setq whitespace-style '(face lines-tail tab-mark trailing))
 (global-whitespace-mode +1)
+(set-face-attribute 'whitespace-line nil :background "red" :foreground "white")
+
+;; show vertical line at column 80
+(setq-default fill-column 80)
+(global-display-fill-column-indicator-mode 1)
 
 ;; turn off indent tabs mode
 (setq-default indent-tabs-mode nil)
