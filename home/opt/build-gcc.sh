@@ -26,12 +26,12 @@ case "${1:-}" in
   clean)
     echo clean ...
     rm -rf "$SRC/build-binutils-$BINUTILSVER" "$SRC/build-gcc-$GCCVER" \
-      "$SRC/crt0" "$PREFIX" "$HOME/bin/$TARGET-"*
+      "$PREFIX"
     exit
     ;;
   clean-all)
     echo clean-all ...
-    rm -rf "$SRC" "$PREFIX" "$HOME/bin/$TARGET-"*
+    rm -rf "$SRC" "$PREFIX"
     exit
     ;;
 esac
@@ -117,10 +117,4 @@ if ! [ -x "$PREFIX/bin/$TARGET-gcc" ]; then
   make install-gcc
   make -j $NPROC all-target-libgcc
   make install-target-libgcc
-fi
-
-# create symlinks
-if ! [ -e "$HOME/bin/$TARGET-gcc" ]; then
-  echo "Create symlinks ..."
-  ln -rst "$HOME/bin" "$PREFIX/bin/"*
 fi
