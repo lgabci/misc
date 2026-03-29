@@ -5,7 +5,7 @@ set -eu
 # check parameters
 if [ $# -ne 2 ]; then
   echo "usage:" >&2
-  echo "$(basename $0) str_file secs" >&2
+  echo "$(basename "$0") str_file secs" >&2
   echo "  str_file: .srt file to adjust time" >&2
   echo "  secs    : time seconds, it can be a negative" >&2
   exit 1
@@ -27,7 +27,7 @@ if ! [[ "$SECS" =~ ^-?[[:digit:]]{1,4}(\.[[:digit:]]{1,3})?$ ]]; then
 fi
 
 awk 'BEGIN {
-       SECS='$SECS'
+       SECS='"$SECS"'
      }
        function addsec(p) {
          split(p, t, ":");

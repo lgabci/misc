@@ -1,0 +1,7 @@
+unlet! skip_defaults_vim
+source $VIMRUNTIME/defaults.vim
+
+autocmd FileType sh setlocal tabstop=8 shiftwidth=2 softtabstop=2 expandtab
+
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
