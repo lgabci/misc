@@ -1,0 +1,3 @@
+prog XTerm xterm x-terminal-emulator
+prog Emacs emacs emacs
+prog Firefox firefox-esr firefox
