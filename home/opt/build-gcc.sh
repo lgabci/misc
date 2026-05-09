@@ -118,3 +118,7 @@ if ! [ -x "$PREFIX/bin/$TARGET-gcc" ]; then
   make -j $NPROC all-target-libgcc
   make install-target-libgcc
 fi
+
+if ! [ -h "$HOME/.local/bin/$TARGET-gcc" ]; then
+  ln -s "$PREFIX/bin/$TARGET-"* "$HOME/.local/bin/"
+fi
