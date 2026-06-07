@@ -30,8 +30,7 @@
 (setq-default indent-tabs-mode nil)
 
 ;; set default font and size
-(if (display-graphic-p)
-  (set-face-attribute 'default nil :font "Monospace-10"))
+(set-face-attribute 'default nil :family "Monospace" :height 105)
 
 ;; goto 1st error in compilation buffer
 (setq compilation-scroll-output 'first-error)
