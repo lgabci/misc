@@ -71,7 +71,7 @@
               indent-tabs-mode nil)
 
 ;; set as comment to #
-(setq asm-comment-char ?\#)
+;(setq asm-comment-char ?\#)
 
 ;; set shell scripts offset
 (setq sh-basic-offset 2)
@@ -115,3 +115,23 @@
       (cons 'transient found))))
 
 (add-hook 'project-find-functions #'my/project-try-makefile)
+
+;; compile command
+(advice-add 'project-compile :around
+	    (lambda (orig-fn &rest args)
+	      (let* ((root (project-root (project-current t)))
+		     (proj-name (file-name-nondirectory (directory-file-name
+							  root)))
+		     (build-dir (expand-file-name
+				  proj-name temporary-file-directory))
+		     (cache-file (expand-file-name
+				   "CMakeCache.txt" build-dir))
+		     (prefix (if (file-exists-p cache-file)
+			       ""
+			       (concat "cmake -B " build-dir
+				       " -G Ninja || (rm -f "
+				       cache-file " && false) && ")))
+		     (compile-command
+		       (concat prefix "cmake --build " build-dir)))
+		(let ((compile-command compile-command))
+		  (apply orig-fn args)))))
