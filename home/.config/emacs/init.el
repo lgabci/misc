@@ -128,8 +128,8 @@
 				   "CMakeCache.txt" build-dir))
 		     (prefix (if (file-exists-p cache-file)
 			       ""
-			       (concat "cmake -B " build-dir
-				       " -G Ninja || (rm -f "
+			       (concat "cmake -G Ninja -B "
+				       build-dir " || (rm -f "
 				       cache-file " && false) && ")))
 		     (compile-command
 		       (concat prefix "cmake --build " build-dir)))
